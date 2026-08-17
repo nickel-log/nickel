@@ -271,42 +271,6 @@
             height: 18px;
         }
 
-        .links-container .help-link {
-            color: #1a1a1a;
-            font-weight: 500;
-            font-size: 17px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .links-container .help-link:hover {
-            color: #f68b1e;
-        }
-
-        .links-container .help-link .card-slash {
-            position: relative;
-            display: inline-block;
-        }
-
-        .links-container .help-link .card-slash i {
-            font-size: 1.1rem;
-        }
-
-        .links-container .help-link .card-slash .slash {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%) rotate(-25deg);
-            font-size: 1.5rem;
-            font-weight: 300;
-            color: #1a1a1a;
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
         .not-customer-title {
             font-size: 0.95rem;
             font-weight: 600;
@@ -628,9 +592,6 @@
             .links-container .forgot-id-link {
                 font-size: 15px;
             }
-            .links-container .help-link {
-                font-size: 15px;
-            }
             .help-link-bottom {
                 font-size: 15px;
             }
@@ -739,9 +700,6 @@
             .links-container .forgot-id-link {
                 font-size: 14px;
             }
-            .links-container .help-link {
-                font-size: 14px;
-            }
             .help-link-bottom {
                 font-size: 14px;
                 margin-top: 1rem;
@@ -848,9 +806,6 @@
             .links-container .forgot-id-link {
                 font-size: 13px;
             }
-            .links-container .help-link {
-                font-size: 13px;
-            }
             .help-link-bottom {
                 font-size: 13px;
             }
@@ -898,13 +853,8 @@
     <header class="header">
         <div class="header-left">
             <a class="logo-container" rel="noopener noreferrer" target="_blank" aria-label="Redirection vers le site Nickel" href="https://nickel.eu/fr">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" role="presentation" height="24" width="24" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M12 3.394c.938 0 1.7-.757 1.7-1.695A1.706 1.706 0 0 0 12 0c-.935 0-1.697.766-1.697 1.7 0 .937.762 1.694 1.697 1.694m4.859 7.02H7.144c-.94 0-1.7.75-1.7 1.69 0 .932.762 1.684 1.7 1.684h9.717c.935 0 1.7-.752 1.7-1.685a1.696 1.696 0 0 0-1.702-1.69m-7.062 5.064h4.41a1.693 1.693 0 0 1 0 3.387l-.004-.01h-4.41c-.931 0-1.69-.761-1.69-1.694a1.69 1.69 0 0 1 1.694-1.683m4.41-10.228h-4.41c-.93 0-1.695.75-1.695 1.68 0 .938.76 1.695 1.69 1.695h4.411l.005.002a1.688 1.688 0 1 0 0-3.377m-3.904 17.053c0-.935.762-1.7 1.697-1.7s1.697.765 1.7 1.7a1.698 1.698 0 0 1-3.397 0" clip-rule="evenodd"/>
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" role="presentation" height="24" width="24" aria-hidden="true">
-                    <path d="M5.745 10.526a.732.732 0 1 0-.002-1.465.732.732 0 0 0 .002 1.465M19.692 13.563h-1.82v-.897h1.808c.061 0 .12-.05.12-.11V11.46c0-.061-.059-.122-.12-.122h-1.809v-.9h1.821c.061 0 .108-.044.108-.105v-1.16a.104.104 0 0 0-.108-.106h-3.18c-.061 0-.099.045-.099.105v5.658c0 .061.038.108.099.108h3.18c.061 0 .108-.047.108-.108v-1.148c0-.061-.047-.12-.108-.12M4.277 9.066h-1.26c-.062 0-.104.044-.104.105v1.678c0 .54.045 1.04.132 1.538L1.366 9.183a.22.22 0 0 0-.196-.117H.096c-.06 0-.096.044-.096.105v5.658c0 .06.033.108.096.108H1.33c.06 0 .129-.047.129-.108v-1.678c0-.546-.059-1.04-.153-1.538l1.68 3.207a.21.21 0 0 0 .19.114H4.28c.063 0 .093-.046.093-.107V9.17c-.002-.06-.032-.105-.096-.105M6.326 11.295H5.159c-.061 0-.104.037-.104.098v3.436c0 .06.045.108.104.108h1.167c.06 0 .103-.047.103-.108v-3.436c0-.06-.042-.098-.103-.098M10.685 13.47c-.27.1-.565.159-.848.159-.807 0-1.32-.53-1.32-1.587 0-1.099.563-1.662 1.36-1.662q.45.001.764.125c.072.028.159-.026.159-.103V9.246c0-.044-.038-.087-.08-.103a3 3 0 0 0-1.047-.202c-1.489 0-2.658 1.093-2.668 3.099 0 2.058 1.226 3.014 2.654 3.014.405 0 .77-.066 1.103-.183.045-.016.08-.059.08-.103v-1.195c0-.075-.084-.13-.157-.104M23.873 13.563H22.03V9.171c0-.06-.042-.105-.103-.105h-1.23c-.064 0-.125.044-.125.105v5.658c0 .06.061.108.124.108h3.18c.062 0 .127-.047.127-.108v-1.15c-.002-.062-.068-.116-.129-.116M15.987 14.78l-1.449-2.773 1.446-2.787a.108.108 0 0 0-.1-.154h-1.25c-.023 0-.044 0-.056.02l-1.162 2.206h-.518v-2.12a.11.11 0 0 0-.11-.106h-1.233c-.061 0-.115.044-.115.105v5.658c0 .06.054.108.115.108h1.233c.06 0 .11-.047.11-.108v-2.121h.515l1.151 2.172c.016.04.059.057.1.057h1.222c.084 0 .138-.085.1-.157"/>
-                </svg>
-            </a>
+    <img src="images/logo_nickel.png" alt="Logo Nickel" style="height: 32px; width: auto;">
+</a>
             <div class="separator"></div>
             <p class="customer-space">Espace client</p>
         </div>
@@ -955,14 +905,6 @@
                                 <path fill-rule="evenodd" d="M21 14a1 1 0 0 1-1 1h-5a1 1 0 1 1 0-2h5a1 1 0 0 1 1 1M21 10a1 1 0 0 1-1 1h-5a1 1 0 1 1 0-2h5a1 1 0 0 1 1 1M7.5 9.7a.7.7 0 1 0 0-1.4.7.7 0 0 0 0 1.4m0 1.3a2 2 0 1 0 0-4 2 2 0 0 0 0 4M6 13.15a1.35 1.35 0 0 0-1.35 1.35v.5a.65.65 0 1 1-1.3 0v-.5A2.65 2.65 0 0 1 6 11.85h3a2.65 2.65 0 0 1 2.65 2.65v.5a.65.65 0 1 1-1.3 0v-.5A1.35 1.35 0 0 0 9 13.15z" clip-rule="evenodd"/>
                             </svg>
                             Identifiant oublié ?
-                        </a>
-
-                        <a href="#" class="help-link">
-                            <span class="card-slash">
-                                <i class="fas fa-credit-card"></i>
-                                <span class="slash">╱</span>
-                            </span>
-                            Aide et Opposition carte
                         </a>
 
                         <p class="not-customer-title">😮 Pas encore client ?</p>
