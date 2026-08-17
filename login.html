@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Espace client | Nickel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            width: 100%;
+            max-width: 1200px;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            color: #1a1a1a;
+        }
+
+        .logo-container svg {
+            height: 24px;
+            width: auto;
+        }
+
+        .separator {
+            width: 1px;
+            height: 28px;
+            background: #d0d0d0;
+        }
+
+        .customer-space {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #1a1a1a;
+            margin: 0;
+        }
+
+        .btn-partenaire {
+            border: 2px solid #1a1a1a;
+            border-radius: 30px;
+            padding: 0.5rem 1.6rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1a1a1a;
+            background: transparent;
+            text-decoration: none;
+            transition: 0.2s;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .btn-partenaire:hover {
+            background: #f5f5f5;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 2rem 1rem;
+        }
+
+        .login-card {
+            background: #eaeaea;
+            border-radius: 36px;
+            padding: 2.8rem 3rem 2.5rem;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.3rem;
+        }
+
+        .login-subtitle {
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .card-illustration {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-illustration img {
+            max-width: 180px;
+            height: auto;
+            display: block;
+        }
+
+        .section-identifiant {
+            display: block;
+        }
+
+        .section-bottom {
+            display: block;
+        }
+        .section-bottom.hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .fieldset-identifiant {
+            border: 1.5px solid #b0b0b0;
+            border-radius: 16px;
+            padding: 0.1rem 0.1rem 0.1rem 0.5rem;
+            background: white;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .fieldset-identifiant:focus-within {
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .fieldset-identifiant legend {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a1a;
+            padding: 0 8px;
+            margin-left: 10px;
+            letter-spacing: 0.3px;
+            background: #eaeaea;
+            border-radius: 12px;
+        }
+
+        .fieldset-identifiant legend .asterisk {
+            color: #c00;
+            margin-left: 2px;
+        }
+
+        .fieldset-identifiant input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 0.8rem 0.8rem;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            outline: none;
+            font-weight: 500;
+            color: #1a1a1a;
+            min-width: 100px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .fieldset-identifiant input::placeholder {
+            color: #aaa;
+            font-weight: 300;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        .btn-full {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.2rem;
+        }
+
+        .btn-full .btn-orange {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-orange {
+            background: #f68b1e;
+            border: none;
+            border-radius: 40px;
+            padding: 0.8rem 1.5rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #111;
+            cursor: pointer;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-orange:hover {
+            background: #e07e1a;
+            transform: scale(0.98);
+        }
+
+        .btn-orange:active {
+            background: #cc7017;
+        }
+
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        .links-container .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 17px;
+            color: #1a1a1a;
+            cursor: pointer;
+        }
+
+        .links-container .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #f68b1e;
+            cursor: pointer;
+        }
+
+        .links-container .forgot-id-link {
+            font-size: 17px;
+            color: #1a1a1a;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .links-container .forgot-id-link:hover {
+            color: #f68b1e;
+        }
+
+        .links-container .forgot-id-link svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .links-container .help-link {
+            color: #1a1a1a;
+            font-weight: 500;
+            font-size: 17px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .links-container .help-link:hover {
+            color: #f68b1e;
+        }
+
+        .links-container .help-link .card-slash {
+            position: relative;
+            display: inline-block;
+        }
+
+        .links-container .help-link .card-slash i {
+            font-size: 1.1rem;
+        }
+
+        .links-container .help-link .card-slash .slash {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(-25deg);
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #1a1a1a;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .not-customer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        .not-customer-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #1a1a1a;
+            border-radius: 40px;
+            padding: 0.7rem 2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            max-width: 320px;
+        }
+
+        .btn-outline:hover {
+            background: #f5f5f5;
+        }
+
+        .btn-outline svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* SECTION MOT DE PASSE */
+        .section-password {
+            display: none;
+        }
+        .section-password.visible {
+            display: block;
+        }
+
+        .password-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1.2rem;
+        }
+
+        .identifiant-display {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: white;
+            border-radius: 16px;
+            padding: 0.6rem 1.2rem;
+            border: 1.5px solid #b0b0b0;
+            margin-bottom: 1.5rem;
+        }
+
+        .identifiant-display .label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            background: #eaeaea;
+            padding: 0 6px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .identifiant-display .value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #1a1a1a;
+            letter-spacing: 2px;
+            flex: 1;
+            font-family: 'Courier New', monospace;
+        }
+
+        .identifiant-display .change-btn {
+            background: none;
+            border: none;
+            color: #f68b1e;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.2rem 0.5rem;
+            border-radius: 8px;
+            transition: 0.15s;
+        }
+
+        .identifiant-display .change-btn:hover {
+            background: rgba(246, 139, 30, 0.1);
+        }
+
+        .fieldset-password {
+            border: 1.5px solid #b0b0b0;
+            border-radius: 16px;
+            padding: 0.1rem 0.1rem 0.1rem 0.5rem;
+            background: white;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .fieldset-password:focus-within {
+            border-color: #1a1a1a;
+        }
+        .fieldset-password legend {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a1a;
+            padding: 0 8px;
+            margin-left: 10px;
+            letter-spacing: 0.3px;
+            background: #eaeaea;
+            border-radius: 12px;
+        }
+        .fieldset-password legend .asterisk {
+            color: #c00;
+            margin-left: 2px;
+        }
+        .fieldset-password input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 0.65rem 0.8rem;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            outline: none;
+            font-weight: 500;
+            min-width: 100px;
+        }
+        .fieldset-password input::placeholder {
+            letter-spacing: 2px;
+            color: #bbb;
+            font-weight: 300;
+            font-size: 0.8rem;
+        }
+
+        .password-eye {
+            padding: 0 12px 0 4px;
+            color: #444;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .password-eye:hover {
+            color: #000;
+        }
+
+        .keyboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.35rem;
+            margin-top: 0.8rem;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .key-touch {
+            background: white;
+            border: 1px solid #d0d0d0;
+            border-radius: 14px;
+            padding: 0.6rem 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: 0.1s;
+            user-select: none;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            max-height: 56px;
+        }
+
+        .key-touch:hover {
+            background: #f5f5f5;
+        }
+
+        .key-touch:active {
+            background: #e8e8e8;
+            transform: scale(0.95);
+        }
+
+        .key-delete {
+            background: white;
+            border: 1px solid #d0d0d0;
+            border-radius: 14px;
+            padding: 0.6rem 0;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #555;
+            cursor: pointer;
+            transition: 0.1s;
+            user-select: none;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            min-height: 48px;
+            max-height: 56px;
+            width: 100%;
+        }
+
+        .key-delete:hover {
+            background: #f5f5f5;
+        }
+
+        .key-delete:active {
+            background: #e8e8e8;
+            transform: scale(0.95);
+        }
+
+        .key-delete i {
+            font-size: 0.85rem;
+        }
+
+        .forgot-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.4rem;
+        }
+
+        .forgot-link {
+            font-size: 0.8rem;
+            color: #1a1a1a;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .forgot-link:hover {
+            color: #f68b1e;
+        }
+
+        /* AIDE ET OPPOSITION - TOUJOURS VISIBLE */
+        .help-link-bottom {
+            display: block;
+            text-align: center;
+            color: #1a1a1a;
+            font-weight: 500;
+            font-size: 17px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 1.5rem;
+        }
+
+        .help-link-bottom:hover {
+            color: #f68b1e;
+        }
+
+        .help-link-bottom .card-slash {
+            position: relative;
+            display: inline-block;
+        }
+
+        .help-link-bottom .card-slash i {
+            font-size: 1.1rem;
+        }
+
+        .help-link-bottom .card-slash .slash {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) rotate(-25deg);
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #1a1a1a;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        @media (max-width: 520px) {
+            .header {
+                padding: 0.8rem 1rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .header-left {
+                gap: 0.4rem;
+            }
+            .logo-container svg {
+                height: 20px;
+            }
+            .customer-space {
+                font-size: 0.85rem;
+            }
+            .btn-partenaire {
+                padding: 0.4rem 1.2rem;
+                font-size: 0.8rem;
+            }
+            .login-card {
+                padding: 1.8rem 1.2rem;
+                border-radius: 28px;
+            }
+            .login-title {
+                font-size: 1.2rem;
+            }
+            .login-subtitle {
+                font-size: 0.8rem;
+            }
+            .card-illustration img {
+                max-width: 130px;
+            }
+            .fieldset-identifiant legend {
+                font-size: 17px;
+            }
+            .fieldset-identifiant input {
+                font-size: 0.95rem;
+                padding: 0.6rem 0.6rem;
+            }
+            .btn-orange {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.85rem;
+            }
+            .links-container .remember-me {
+                font-size: 15px;
+            }
+            .links-container .forgot-id-link {
+                font-size: 15px;
+            }
+            .links-container .help-link {
+                font-size: 15px;
+            }
+            .help-link-bottom {
+                font-size: 15px;
+            }
+            .btn-outline {
+                max-width: 100%;
+            }
+            .main-content {
+                padding: 1rem 0.8rem 3rem;
+            }
+            .keyboard-grid {
+                max-width: 280px;
+                gap: 0.25rem;
+            }
+            .key-touch {
+                min-height: 42px;
+                max-height: 48px;
+                font-size: 1rem;
+                border-radius: 12px;
+                padding: 0.4rem 0;
+            }
+            .key-delete {
+                min-height: 42px;
+                max-height: 48px;
+                font-size: 0.6rem;
+                border-radius: 12px;
+                padding: 0.4rem 0;
+            }
+            .password-title {
+                font-size: 1.1rem;
+            }
+            .identifiant-display {
+                padding: 0.5rem 1rem;
+                flex-wrap: wrap;
+            }
+            .identifiant-display .value {
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <a class="logo-container" rel="noopener noreferrer" target="_blank" aria-label="Redirection vers le site Nickel" href="https://nickel.eu/fr">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" role="presentation" height="24" width="24" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 3.394c.938 0 1.7-.757 1.7-1.695A1.706 1.706 0 0 0 12 0c-.935 0-1.697.766-1.697 1.7 0 .937.762 1.694 1.697 1.694m4.859 7.02H7.144c-.94 0-1.7.75-1.7 1.69 0 .932.762 1.684 1.7 1.684h9.717c.935 0 1.7-.752 1.7-1.685a1.696 1.696 0 0 0-1.702-1.69m-7.062 5.064h4.41a1.693 1.693 0 0 1 0 3.387l-.004-.01h-4.41c-.931 0-1.69-.761-1.69-1.694a1.69 1.69 0 0 1 1.694-1.683m4.41-10.228h-4.41c-.93 0-1.695.75-1.695 1.68 0 .938.76 1.695 1.69 1.695h4.411l.005.002a1.688 1.688 0 1 0 0-3.377m-3.904 17.053c0-.935.762-1.7 1.697-1.7s1.697.765 1.7 1.7a1.698 1.698 0 0 1-3.397 0" clip-rule="evenodd"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" role="presentation" height="24" width="24" aria-hidden="true">
+                    <path d="M5.745 10.526a.732.732 0 1 0-.002-1.465.732.732 0 0 0 .002 1.465M19.692 13.563h-1.82v-.897h1.808c.061 0 .12-.05.12-.11V11.46c0-.061-.059-.122-.12-.122h-1.809v-.9h1.821c.061 0 .108-.044.108-.105v-1.16a.104.104 0 0 0-.108-.106h-3.18c-.061 0-.099.045-.099.105v5.658c0 .061.038.108.099.108h3.18c.061 0 .108-.047.108-.108v-1.148c0-.061-.047-.12-.108-.12M4.277 9.066h-1.26c-.062 0-.104.044-.104.105v1.678c0 .54.045 1.04.132 1.538L1.366 9.183a.22.22 0 0 0-.196-.117H.096c-.06 0-.096.044-.096.105v5.658c0 .06.033.108.096.108H1.33c.06 0 .129-.047.129-.108v-1.678c0-.546-.059-1.04-.153-1.538l1.68 3.207a.21.21 0 0 0 .19.114H4.28c.063 0 .093-.046.093-.107V9.17c-.002-.06-.032-.105-.096-.105M6.326 11.295H5.159c-.061 0-.104.037-.104.098v3.436c0 .06.045.108.104.108h1.167c.06 0 .103-.047.103-.108v-3.436c0-.06-.042-.098-.103-.098M10.685 13.47c-.27.1-.565.159-.848.159-.807 0-1.32-.53-1.32-1.587 0-1.099.563-1.662 1.36-1.662q.45.001.764.125c.072.028.159-.026.159-.103V9.246c0-.044-.038-.087-.08-.103a3 3 0 0 0-1.047-.202c-1.489 0-2.658 1.093-2.668 3.099 0 2.058 1.226 3.014 2.654 3.014.405 0 .77-.066 1.103-.183.045-.016.08-.059.08-.103v-1.195c0-.075-.084-.13-.157-.104M23.873 13.563H22.03V9.171c0-.06-.042-.105-.103-.105h-1.23c-.064 0-.125.044-.125.105v5.658c0 .06.061.108.124.108h3.18c.062 0 .127-.047.127-.108v-1.15c-.002-.062-.068-.116-.129-.116M15.987 14.78l-1.449-2.773 1.446-2.787a.108.108 0 0 0-.1-.154h-1.25c-.023 0-.044 0-.056.02l-1.162 2.206h-.518v-2.12a.11.11 0 0 0-.11-.106h-1.233c-.061 0-.115.044-.115.105v5.658c0 .06.054.108.115.108h1.233c.06 0 .11-.047.11-.108v-2.121h.515l1.151 2.172c.016.04.059.057.1.057h1.222c.084 0 .138-.085.1-.157"/>
+                </svg>
+            </a>
+            <div class="separator"></div>
+            <p class="customer-space">Espace client</p>
+        </div>
+        <a class="btn-partenaire" href="https://pro.nickel.eu">Espace partenaire</a>
+    </header>
+
+    <main class="main-content">
+        <div class="login-card">
+
+            <!-- SECTION IDENTIFIANT -->
+            <div class="section-identifiant" id="sectionIdentifiant">
+
+                <h1 class="login-title">Saisir votre identifiant</h1>
+                <p class="login-subtitle">L'identifiant se trouve au dos de votre carte Nickel ou sur l'email d'inscription</p>
+
+                <div class="card-illustration">
+                    <img 
+                        alt="Dos de la carte Nickel avec le code-barres et l'identifiant en évidence" 
+                        fetchpriority="high" 
+                        src="https://static-resources.nickel.eu/static/illustration/card-back-with-highlighted-barcode-v2.svg"
+                    >
+                </div>
+
+                <form id="loginForm" autocomplete="off">
+
+                    <div class="form-group">
+                        <fieldset class="fieldset-identifiant">
+                            <legend>Identifiant <span class="asterisk">*</span></legend>
+                            <input type="text" id="identifiant" placeholder="10 chiffres" maxlength="14" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+                        </fieldset>
+                    </div>
+
+                    <div class="btn-full">
+                        <button type="button" class="btn-orange" id="btnSuivant">
+                            <i class="fas fa-arrow-right" style="margin-right: 6px;"></i> Suivant
+                        </button>
+                    </div>
+
+                    <div class="links-container">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe">
+                            Mémoriser mon identifiant
+                        </label>
+                        <a href="#" class="forgot-id-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="18" height="18">
+                                <path fill-rule="evenodd" d="M3 5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM0 6a3 3 0 0 1 3-3h18a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd" d="M21 14a1 1 0 0 1-1 1h-5a1 1 0 1 1 0-2h5a1 1 0 0 1 1 1M21 10a1 1 0 0 1-1 1h-5a1 1 0 1 1 0-2h5a1 1 0 0 1 1 1M7.5 9.7a.7.7 0 1 0 0-1.4.7.7 0 0 0 0 1.4m0 1.3a2 2 0 1 0 0-4 2 2 0 0 0 0 4M6 13.15a1.35 1.35 0 0 0-1.35 1.35v.5a.65.65 0 1 1-1.3 0v-.5A2.65 2.65 0 0 1 6 11.85h3a2.65 2.65 0 0 1 2.65 2.65v.5a.65.65 0 1 1-1.3 0v-.5A1.35 1.35 0 0 0 9 13.15z" clip-rule="evenodd"/>
+                            </svg>
+                            Identifiant oublié ?
+                        </a>
+                    </div>
+
+                </form>
+
+                <!-- PAS ENCORE CLIENT ? - UNIQUEMENT DANS SECTION IDENTIFIANT -->
+                <div class="section-bottom" id="sectionBottom">
+                    <div class="not-customer">
+                        <p class="not-customer-title">😮 Pas encore client ?</p>
+                        <button type="button" class="btn-outline">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M12 3.394c.938 0 1.7-.757 1.7-1.695A1.706 1.706 0 0 0 12 0c-.935 0-1.697.766-1.697 1.7 0 .937.762 1.694 1.697 1.694m4.859 7.02H7.144c-.94 0-1.7.75-1.7 1.69 0 .932.762 1.684 1.7 1.684h9.717c.935 0 1.7-.752 1.7-1.685a1.696 1.696 0 0 0-1.702-1.69m-7.062 5.064h4.41a1.693 1.693 0 0 1 0 3.387l-.004-.01h-4.41c-.931 0-1.69-.761-1.69-1.694a1.69 1.69 0 0 1 1.694-1.683m4.41-10.228h-4.41c-.93 0-1.695.75-1.695 1.68 0 .938.76 1.695 1.69 1.695h4.411l.005.002a1.688 1.688 0 1 0 0-3.377m-3.904 17.053c0-.935.762-1.7 1.697-1.7s1.697.765 1.7 1.7a1.698 1.698 0 0 1-3.397 0" clip-rule="evenodd"/>
+                            </svg>
+                            Ouvrir un compte en 5mn
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SECTION MOT DE PASSE -->
+            <div class="section-password" id="sectionPassword">
+
+                <h2 class="password-title">Entrez votre mot de passe pour continuer</h2>
+
+                <div class="identifiant-display">
+                    <span class="label">Identifiant</span>
+                    <span class="value" id="identifiantValue">--- --- --- -</span>
+                    <button type="button" class="change-btn" id="btnChanger">
+                        <i class="fas fa-arrow-left"></i> Changer
+                    </button>
+                </div>
+
+                <form id="passwordForm" autocomplete="off">
+                    <div class="form-group">
+                        <fieldset class="fieldset-password">
+                            <legend>Mot de passe (6 chiffres) <span class="asterisk">*</span></legend>
+                            <input type="password" id="motDePasse" placeholder="••••••" maxlength="6" inputmode="numeric" pattern="[0-9]*">
+                            <span class="password-eye" id="togglePassword">
+                                <i class="fas fa-eye" id="eyeIcon"></i>
+                            </span>
+                        </fieldset>
+
+                        <div class="forgot-row">
+                            <a href="#" class="forgot-link">Mot de passe oublié ?</a>
+                        </div>
+
+                        <div class="keyboard-grid">
+                            <button type="button" class="key-touch" data-key="1">1</button>
+                            <button type="button" class="key-touch" data-key="2">2</button>
+                            <button type="button" class="key-touch" data-key="3">3</button>
+                            <button type="button" class="key-touch" data-key="4">4</button>
+                            <button type="button" class="key-touch" data-key="5">5</button>
+                            <button type="button" class="key-touch" data-key="6">6</button>
+                            <button type="button" class="key-touch" data-key="7">7</button>
+                            <button type="button" class="key-touch" data-key="8">8</button>
+                            <button type="button" class="key-touch" data-key="9">9</button>
+                            <button type="button" class="key-touch" data-key="0">0</button>
+                            <button type="button" class="key-touch" style="background: transparent; border: none; box-shadow: none; cursor: default;"></button>
+                            <button type="button" class="key-delete" data-key="delete">
+                                <i class="fas fa-delete-left"></i> Effacer
+                            </button>
+                        </div>
+
+                        <div class="btn-full">
+                            <button type="submit" class="btn-orange" id="btnValider">
+                                <i class="fas fa-check-circle" style="margin-right: 6px;"></i> Valider
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- AIDE ET OPPOSITION - TOUJOURS VISIBLE -->
+            <a href="#" class="help-link-bottom">
+                <span class="card-slash">
+                    <i class="fas fa-credit-card"></i>
+                    <span class="slash">╱</span>
+                </span>
+                Aide et Opposition carte
+            </a>
+
+        </div>
+    </main>
+
+    <script>
+        (function() {
+            const identifiantInput = document.getElementById('identifiant');
+            const suivantBtn = document.getElementById('btnSuivant');
+            const sectionIdentifiant = document.getElementById('sectionIdentifiant');
+            const sectionPassword = document.getElementById('sectionPassword');
+            const sectionBottom = document.getElementById('sectionBottom');
+            const identifiantValue = document.getElementById('identifiantValue');
+            const btnChanger = document.getElementById('btnChanger');
+            const motDePasseInput = document.getElementById('motDePasse');
+            const togglePassword = document.getElementById('togglePassword');
+            const eyeIcon = document.getElementById('eyeIcon');
+            const validerBtn = document.getElementById('btnValider');
+            const passwordForm = document.getElementById('passwordForm');
+
+            function formatIdentifiant(value) {
+                const digits = value.replace(/\D/g, '');
+                const limited = digits.slice(0, 10);
+                let formatted = '';
+                for (let i = 0; i < limited.length; i++) {
+                    if (i === 3 || i === 6) {
+                        formatted += '-';
+                    }
+                    if (i === 9) {
+                        if (formatted.length > 0 && !formatted.endsWith('-')) {
+                            formatted += '-';
+                        }
+                    }
+                    formatted += limited[i];
+                }
+                return formatted;
+            }
+
+            function formatIdentifiantDisplay(value) {
+                const digits = value.replace(/\D/g, '');
+                const limited = digits.slice(0, 10);
+                let formatted = '';
+                for (let i = 0; i < limited.length; i++) {
+                    if (i === 3 || i === 6) {
+                        formatted += ' ';
+                    }
+                    if (i === 9) {
+                        if (formatted.length > 0 && !formatted.endsWith(' ')) {
+                            formatted += ' ';
+                        }
+                    }
+                    formatted += limited[i];
+                }
+                while (formatted.replace(/\s/g, '').length < 10) {
+                    if (formatted.length === 3 || formatted.length === 7) {
+                        formatted += ' ';
+                    }
+                    if (formatted.length === 11) {
+                        formatted += ' ';
+                    }
+                    formatted += '-';
+                }
+                return formatted || '--- --- --- -';
+            }
+
+            identifiantInput.addEventListener('input', function(e) {
+                const digits = this.value.replace(/\D/g, '');
+                const limited = digits.slice(0, 10);
+                const formatted = formatIdentifiant(limited);
+                this.value = formatted;
+            });
+
+            identifiantInput.addEventListener('keydown', function(e) {
+                const key = e.key;
+                if (['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(key)) {
+                    return;
+                }
+                if (!/^[0-9]$/.test(key) && key !== 'Unidentified') {
+                    e.preventDefault();
+                }
+            });
+
+            suivantBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const rawId = identifiantInput.value.replace(/\D/g, '');
+                if (rawId.length !== 10) {
+                    alert('Veuillez saisir un identifiant de 10 chiffres.');
+                    identifiantInput.focus();
+                    return;
+                }
+
+                identifiantValue.textContent = formatIdentifiantDisplay(rawId);
+                sectionIdentifiant.style.display = 'none';
+                sectionPassword.classList.add('visible');
+                sectionBottom.classList.add('hidden');
+
+                setTimeout(() => motDePasseInput.focus(), 100);
+            });
+
+            btnChanger.addEventListener('click', function(e) {
+                e.preventDefault();
+                sectionPassword.classList.remove('visible');
+                sectionIdentifiant.style.display = 'block';
+                sectionBottom.classList.remove('hidden');
+                motDePasseInput.value = '';
+                validerBtn.style.display = 'none';
+                identifiantInput.focus();
+            });
+
+            togglePassword.addEventListener('click', function() {
+                const type = motDePasseInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                motDePasseInput.setAttribute('type', type);
+                eyeIcon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+            });
+
+            motDePasseInput.addEventListener('input', function() {
+                const val = this.value.replace(/\D/g, '');
+                if (val.length === 6) {
+                    validerBtn.style.display = 'flex';
+                } else {
+                    validerBtn.style.display = 'none';
+                }
+                if (val.length > 6) {
+                    this.value = val.slice(0, 6);
+                }
+            });
+
+            motDePasseInput.addEventListener('keydown', function(e) {
+                const key = e.key;
+                if (['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(key)) {
+                    return;
+                }
+                if (!/^[0-9]$/.test(key) && key !== 'Unidentified') {
+                    e.preventDefault();
+                }
+            });
+
+            document.querySelectorAll('.key-touch, .key-delete').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    const key = this.dataset.key;
+                    if (key === 'delete') {
+                        motDePasseInput.value = motDePasseInput.value.slice(0, -1);
+                    } else if (/^[0-9]$/.test(key)) {
+                        const current = motDePasseInput.value.replace(/\D/g, '');
+                        if (current.length < 6) {
+                            motDePasseInput.value = current + key;
+                        }
+                    }
+                    motDePasseInput.dispatchEvent(new Event('input'));
+                    motDePasseInput.focus();
+                });
+            });
+
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const mdp = motDePasseInput.value.replace(/\D/g, '');
+                if (mdp.length === 6) {
+                    alert('✅ Connexion simulée\nIdentifiant: ' + identifiantValue.textContent + '\nMot de passe: ' + mdp);
+                } else {
+                    alert('Veuillez saisir un mot de passe de 6 chiffres.');
+                }
+            });
+
+            validerBtn.style.display = 'none';
+
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+            });
+
+        })();
+    </script>
+</body>
+</html>
